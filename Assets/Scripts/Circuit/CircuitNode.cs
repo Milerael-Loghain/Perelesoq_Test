@@ -1,10 +1,18 @@
 using System;
 using System.Collections.Generic;
+using Data;
+using Devices;
 using UnityEngine;
 
 [Serializable]
 public class CircuitNode
 {
+    public CircuitDeviceType DeviceType
+    {
+        get => _deviceType;
+        set => _deviceType = value;
+    }
+
     public int Index
     {
         get => _index;
@@ -24,24 +32,21 @@ public class CircuitNode
     }
 
     public List<CircuitNode> OutputNodes => _outputNodes;
+    public ICircuitNodeLogic CircuitNodeLogic => _circuitNodeLogic;
 
     [SerializeField] private int _index;
+    [SerializeField] private CircuitDeviceType _deviceType;
     [SerializeField] private List<CircuitNode> _inputNodes = new();
     [SerializeField] private GameObject _nodeGameObject;
     [SerializeField] private List<CircuitNode> _outputNodes = new();
-}
 
-[Serializable]
-public class CircuitTree
-{
-    public CircuitNode RootNode => _rootNode;
+    private ICircuitNodeLogic _circuitNodeLogic;
 
-    [SerializeField] private CircuitNode _rootNode;
-}
+    public void Initialize(IDeviceConfig deviceConfig)
+    {
+        if (deviceConfig.DeviceLogicType is not ICircuitNodeLogic) return;
 
-public class PowerSource : MonoBehaviour
-{
-    public CircuitTree CircuitTree => _circuitTree;
-
-    [SerializeField] private CircuitTree _circuitTree;
+        _circuitNodeLogic = (ICircuitNodeLogic) Activator.CreateInstance(deviceConfig.DeviceLogicType);
+        _circuitNodeLogic.Initialize(deviceConfig);
+    }
 }

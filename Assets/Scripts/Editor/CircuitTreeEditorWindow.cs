@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Devices;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,33 +28,25 @@ namespace Editor
             }
 
 
-            if (GUILayout.Button("Set Indexes"))
+            if (GUILayout.Button("Refresh Nodes List"))
             {
                 int index = 0;
                 Dictionary<GameObject, int> indexByGameObject = new();
-                SetIndexesRecursive(powerSource.CircuitTree.RootNode, ref index, ref indexByGameObject);
+                Dictionary<int, CircuitNode> nodeByIndex = new();
+                SetIndexesAndParentsRecursive(null, powerSource.CircuitTree.RootNode, ref index, ref indexByGameObject, ref nodeByIndex);
+
+                powerSource.Nodes = nodeByIndex.OrderBy(kp => kp.Key)
+                    .Select(kp => kp.Value)
+                    .ToList();
             }
 
             DrawNode(powerSource.CircuitTree.RootNode);
-            // DrawNode(property.FindPropertyRelative("_rootNode"));
-
-            // // Calculate rects
-            // var amountRect = new Rect(position.x, position.y, 30, position.height);
-            // var unitRect = new Rect(position.x + 35, position.y, 50, position.height);
-            // var nameRect = new Rect(position.x + 90, position.y, position.width - 90, position.height);
-            //
-            // // Draw fields - pass GUIContent.none to each so they are drawn without labels
-            // EditorGUI.PropertyField(amountRect, property.FindPropertyRelative("amount"), GUIContent.none);
-            // EditorGUI.PropertyField(unitRect, property.FindPropertyRelative("unit"), GUIContent.none);
-            // EditorGUI.PropertyField(nameRect, property.FindPropertyRelative("name"), GUIContent.none);
-            //
-            // // Set indent back to what it was
-            // EditorGUI.indentLevel = indent;
         }
 
         private void DrawNode(CircuitNode circuitNode)
         {
             EditorGUILayout.BeginVertical(GUILayout.MaxWidth(300f));
+            circuitNode.DeviceType = (CircuitDeviceType) EditorGUILayout.EnumPopup(circuitNode.DeviceType);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(circuitNode.Index.ToString(), GUILayout.MaxWidth(15f));
             circuitNode.NodeGameObject = (GameObject) EditorGUILayout.ObjectField(circuitNode.NodeGameObject, typeof(GameObject));
@@ -83,7 +77,7 @@ namespace Editor
             EditorGUILayout.EndVertical();
         }
 
-        private void SetIndexesRecursive(CircuitNode node, ref int index, ref Dictionary<GameObject, int> indexByGameObject)
+        private void SetIndexesAndParentsRecursive(CircuitNode parentNode, CircuitNode node, ref int index, ref Dictionary<GameObject, int> indexByGameObject, ref Dictionary<int, CircuitNode> nodeByIndex)
         {
             if (indexByGameObject.ContainsKey(node.NodeGameObject))
             {
@@ -97,9 +91,27 @@ namespace Editor
                 index++;
             }
 
+            if (nodeByIndex.ContainsKey(node.Index))
+            {
+                node = nodeByIndex[node.Index];
+            }
+            else
+            {
+                nodeByIndex[node.Index] = node;
+                node.InputNodes = new List<CircuitNode>();
+            }
+
+            if (parentNode != null)
+            {
+                if (!node.InputNodes.Any(node => node.Index == parentNode.Index))
+                {
+                    node.InputNodes.Add(parentNode);
+                }
+            }
+
             foreach (var childNode in node.OutputNodes)
             {
-                SetIndexesRecursive(childNode, ref index, ref indexByGameObject);
+                SetIndexesAndParentsRecursive(node, childNode, ref index, ref indexByGameObject, ref nodeByIndex);
             }
         }
     }
