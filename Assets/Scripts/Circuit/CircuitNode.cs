@@ -42,11 +42,11 @@ public class CircuitNode
 
     private ICircuitNodeLogic _circuitNodeLogic;
 
-    public void Initialize(IDeviceConfig deviceConfig)
+    public void Initialize(DeviceConfigBase deviceConfigBase)
     {
-        if (deviceConfig.DeviceLogicType is not ICircuitNodeLogic) return;
+        if (deviceConfigBase.DeviceLogicType is not ICircuitNodeLogic) return;
 
-        _circuitNodeLogic = (ICircuitNodeLogic) Activator.CreateInstance(deviceConfig.DeviceLogicType);
-        _circuitNodeLogic.Initialize(deviceConfig);
+        _circuitNodeLogic = (ICircuitNodeLogic) Activator.CreateInstance(deviceConfigBase.DeviceLogicType);
+        _circuitNodeLogic.Initialize(this, deviceConfigBase);
     }
 }

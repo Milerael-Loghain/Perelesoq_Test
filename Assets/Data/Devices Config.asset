@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f567dd7499f489e9dfdec466cec05ad, type: 3}
+  m_Name: Devices Config
+  m_EditorClassIdentifier: 
+  DeviceConfigByTypes:
+  - DeviceType: 0
+    DeviceConfigBase: {fileID: 11400000, guid: 1df92727a3a5046309ecbe2aea0718fb, type: 2}
+  - DeviceType: 1
+    DeviceConfigBase: {fileID: 11400000, guid: a6092164f573a47a1823daf2cd207b1c, type: 2}
+  - DeviceType: 2
+    DeviceConfigBase: {fileID: 11400000, guid: f1553d4ec149b494dbf9427c3b4638a4, type: 2}
+  - DeviceType: 8
+    DeviceConfigBase: {fileID: 11400000, guid: 8da191f6da64a4319ac1cb3d2999a590, type: 2}
+  - DeviceType: 7
+    DeviceConfigBase: {fileID: 11400000, guid: b9921c903b04c44afad1b14e60273d03, type: 2}
+  - DeviceType: 6
+    DeviceConfigBase: {fileID: 11400000, guid: a0ae666e7def7482fbd964cd6c381e62, type: 2}
+  - DeviceType: 5
+    DeviceConfigBase: {fileID: 11400000, guid: b2978ee48c73c4ddd87529e4315935bf, type: 2}
+  - DeviceType: 3
+    DeviceConfigBase: {fileID: 11400000, guid: 983b842389ec04cdd8304e05489b9cba, type: 2}
+  - DeviceType: 4
+    DeviceConfigBase: {fileID: 11400000, guid: 75f239ae346334610bb259b0f7d145bd, type: 2}
