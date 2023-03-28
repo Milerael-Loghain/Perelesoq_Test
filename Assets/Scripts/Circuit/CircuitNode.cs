@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using Data;
 using Devices;
+using Devices.Visuals.Abstraction;
 using UnityEngine;
 
 [Serializable]
-public class CircuitNode
+public class CircuitNode : IDisposable
 {
     public CircuitDeviceType DeviceType
     {
@@ -41,12 +42,22 @@ public class CircuitNode
     [SerializeField] private List<CircuitNode> _outputNodes = new();
 
     private ICircuitNodeLogic _circuitNodeLogic;
+    private IDeviceVisuals _deviceVisuals;
 
     public void Initialize(DeviceConfigBase deviceConfigBase)
     {
         if (deviceConfigBase.DeviceLogicType is not ICircuitNodeLogic) return;
 
+        _deviceVisuals = _nodeGameObject.GetComponent<IDeviceVisuals>();
+
         _circuitNodeLogic = (ICircuitNodeLogic) Activator.CreateInstance(deviceConfigBase.DeviceLogicType);
+
+        _circuitNodeLogic.OnActiveStateChanged += _deviceVisuals.SetVisualState;
         _circuitNodeLogic.Initialize(this, deviceConfigBase);
+    }
+
+    public void Dispose()
+    {
+        _circuitNodeLogic.OnActiveStateChanged -= _deviceVisuals.SetVisualState;
     }
 }

@@ -1,10 +1,12 @@
-using System.Linq;
+using System;
 using Data;
 
 namespace Circuit
 {
     public class CircuitNodeLogicBase : ICircuitNodeLogic
     {
+        public event Action<bool> OnActiveStateChanged;
+
         public bool IsActive
         {
             get => _isActive;
@@ -13,7 +15,8 @@ namespace Circuit
                 if (_isActive == value) return;
 
                 _isActive = value;
-                RefreshOutputNodes();
+                OnActiveStateChanged.Invoke(value);
+                RefreshOutputNodesCurrentState();
             }
         }
 
@@ -25,7 +28,7 @@ namespace Circuit
                 if (_hasCurrent == value) return;
 
                 _hasCurrent = value;
-                RefreshOutputNodes();
+                RefreshOutputNodesCurrentState();
             }
         }
 
@@ -67,7 +70,7 @@ namespace Circuit
             HasCurrent = hasCurrent;
         }
 
-        private void RefreshOutputNodes()
+        private void RefreshOutputNodesCurrentState()
         {
             foreach (var outputNode in CircuitNode.OutputNodes)
             {

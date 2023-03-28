@@ -27,6 +27,14 @@ public class PowerSource : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        foreach (var node in _nodes)
+        {
+            node.Dispose();
+        }
+    }
+
     public void SetActiveState(int nodeId, bool isActive)
     {
         if (nodeId >= 0 && nodeId < _nodes.Count)
