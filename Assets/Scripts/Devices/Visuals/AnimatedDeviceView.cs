@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Devices.Visuals
 {
-    public class AnimatedDeviceVisuals : MonoBehaviour, IDeviceVisuals
+    public class AnimatedDeviceView : MonoBehaviour, IDeviceView
     {
         [SerializeField] private Animator _animator;
         [SerializeField] private string _activeState;

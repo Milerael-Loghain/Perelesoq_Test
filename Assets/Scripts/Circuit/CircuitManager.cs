@@ -1,27 +1,36 @@
 using System;
 using System.Collections.Generic;
-using Devices;
 using Devices.Data;
+using Framework;
 using UnityEngine;
 
-public class PowerSource : MonoBehaviour
+public class CircuitManager : MonoBehaviour
 {
+#if UNITY_EDITOR
     public CircuitTree CircuitTree => _circuitTree;
+#endif
+
     public List<CircuitNode> Nodes
     {
         get => _nodes;
+#if UNITY_EDITOR
         set => _nodes = value;
+#endif
     }
 
     [SerializeField] private CircuitTree _circuitTree;
     [SerializeField] private List<CircuitNode> _nodes;
-    [SerializeField] private DevicesConfig _devicesConfig;
 
     private void Awake()
     {
+        ServiceLocator.Instance.Register(this);
+    }
+
+    public void Initialize(DevicesConfig devicesConfig)
+    {
         foreach (var node in _nodes)
         {
-            var deviceConfig = _devicesConfig.GetDeviceConfigByType(node.DeviceType);
+            var deviceConfig = devicesConfig.GetDeviceConfigByType(node.DeviceType);
 
             node.Initialize(deviceConfig);
         }
@@ -29,18 +38,11 @@ public class PowerSource : MonoBehaviour
 
     private void OnDestroy()
     {
+        ServiceLocator.Instance.Unregister(this);
+
         foreach (var node in _nodes)
         {
             node.Dispose();
-        }
-    }
-
-    public void SetActiveState(int nodeId, bool isActive)
-    {
-        if (nodeId >= 0 && nodeId < _nodes.Count)
-        {
-            var node = _nodes[nodeId];
-            node.CircuitNodeLogic.SetActiveState(isActive);
         }
     }
 }

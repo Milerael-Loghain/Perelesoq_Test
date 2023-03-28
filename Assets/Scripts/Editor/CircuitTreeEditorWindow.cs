@@ -19,7 +19,7 @@ namespace Editor
 
         public void OnGUI()
         {
-            var powerSource = FindObjectOfType<PowerSource>();
+            var powerSource = FindObjectOfType<CircuitManager>();
 
             if (powerSource == null)
             {

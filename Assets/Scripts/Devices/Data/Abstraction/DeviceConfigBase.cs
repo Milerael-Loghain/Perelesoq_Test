@@ -8,7 +8,7 @@ namespace Data
         public Type DeviceLogicType { get; }
         public float ActiveEnergyConsumedByHour { get; }
         public float EnergyConsumedByActivation { get; }
-
         public bool InitialActiveState { get; }
+        public GameObject DeviceUiView { get; }
     }
 }

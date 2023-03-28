@@ -1,6 +1,6 @@
 namespace Devices.Visuals.Abstraction
 {
-    public interface IDeviceVisuals
+    public interface IDeviceView
     {
         public void SetVisualState(bool isActive);
     }

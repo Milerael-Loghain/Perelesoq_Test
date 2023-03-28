@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Data;
 using Devices;
+using Devices.UI;
 using Devices.Visuals.Abstraction;
 using UnityEngine;
 
@@ -37,27 +38,46 @@ public class CircuitNode : IDisposable
 
     [SerializeField] private int _index;
     [SerializeField] private CircuitDeviceType _deviceType;
-    [SerializeField] private List<CircuitNode> _inputNodes = new();
+    [SerializeReference] private List<CircuitNode> _inputNodes = new();
     [SerializeField] private GameObject _nodeGameObject;
-    [SerializeField] private List<CircuitNode> _outputNodes = new();
+    [SerializeReference] private List<CircuitNode> _outputNodes = new();
 
     private ICircuitNodeLogic _circuitNodeLogic;
-    private IDeviceVisuals _deviceVisuals;
+    private IDeviceView _deviceView;
+    private IDeviceUIView _deviceUIView;
 
     public void Initialize(DeviceConfigBase deviceConfigBase)
     {
         if (deviceConfigBase.DeviceLogicType is not ICircuitNodeLogic) return;
 
-        _deviceVisuals = _nodeGameObject.GetComponent<IDeviceVisuals>();
+        _deviceView = _nodeGameObject.GetComponent<IDeviceView>();
 
         _circuitNodeLogic = (ICircuitNodeLogic) Activator.CreateInstance(deviceConfigBase.DeviceLogicType);
 
-        _circuitNodeLogic.OnActiveStateChanged += _deviceVisuals.SetVisualState;
+        _circuitNodeLogic.OnActiveStateChanged += OnSetStateFromLogic;
         _circuitNodeLogic.Initialize(this, deviceConfigBase);
+    }
+
+    public void BindUIView(IDeviceUIView deviceUIView)
+    {
+        _deviceUIView = deviceUIView;
+        _deviceUIView.OnSetState += OnSetStateFromUI;
     }
 
     public void Dispose()
     {
-        _circuitNodeLogic.OnActiveStateChanged -= _deviceVisuals.SetVisualState;
+        _circuitNodeLogic.OnActiveStateChanged -= OnSetStateFromLogic;
+        _deviceUIView.OnSetState -= OnSetStateFromUI;
+    }
+
+    private void OnSetStateFromUI(bool isActive)
+    {
+        _circuitNodeLogic.SetActiveState(isActive);
+    }
+
+    private void OnSetStateFromLogic(bool isActive)
+    {
+        _deviceView.SetVisualState(isActive);
+        _deviceUIView.UpdateStateInfo(isActive);
     }
 }
