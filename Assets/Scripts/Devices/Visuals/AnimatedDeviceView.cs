@@ -9,7 +9,7 @@ namespace Devices.Visuals
         [SerializeField] private string _activeState;
         [SerializeField] private string _inactiveState;
 
-        public void SetVisualState(bool isActive)
+        public void SetVisualState(bool isActive, bool hasCurrent)
         {
             _animator.Play(isActive ? _activeState : _inactiveState);
         }

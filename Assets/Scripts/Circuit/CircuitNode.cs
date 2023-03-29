@@ -39,9 +39,12 @@ public class CircuitNode : IDisposable
         set => _defaultActiveState = value;
     }
 
+    public string GeneratedGuid => _generatedGuid;
+
     public List<CircuitNode> OutputNodes => _outputNodes;
     public ICircuitNodeLogic CircuitNodeLogic => _circuitNodeLogic;
 
+    [SerializeField] private string _generatedGuid = Guid.NewGuid().ToString();
     [SerializeField] private int _index;
     [SerializeField] private CircuitDeviceType _deviceType;
     [SerializeField] private bool _defaultActiveState;
@@ -55,13 +58,15 @@ public class CircuitNode : IDisposable
 
     public void Initialize(DeviceConfigBase deviceConfigBase)
     {
+        _generatedGuid = Guid.NewGuid().ToString();
+
         if (!typeof(ICircuitNodeLogic).IsAssignableFrom(deviceConfigBase.DeviceLogicType)) return;
 
         _deviceView = _nodeGameObject.GetComponent<IDeviceView>();
 
         _circuitNodeLogic = (ICircuitNodeLogic) Activator.CreateInstance(deviceConfigBase.DeviceLogicType);
 
-        _circuitNodeLogic.OnActiveStateChanged += OnSetStateFromLogic;
+        _circuitNodeLogic.OnStateChanged += OnSetStateFromLogic;
         _circuitNodeLogic.Initialize(this, deviceConfigBase);
     }
 
@@ -73,7 +78,7 @@ public class CircuitNode : IDisposable
 
     public void Dispose()
     {
-        _circuitNodeLogic.OnActiveStateChanged -= OnSetStateFromLogic;
+        _circuitNodeLogic.OnStateChanged -= OnSetStateFromLogic;
         _deviceUIView.OnSetState -= OnSetStateFromUI;
     }
 
@@ -82,9 +87,9 @@ public class CircuitNode : IDisposable
         _circuitNodeLogic.SetActiveState(isActive);
     }
 
-    private void OnSetStateFromLogic(bool isActive)
+    private void OnSetStateFromLogic(bool isActive, bool hasCurrent)
     {
-        _deviceView?.SetVisualState(isActive);
-        _deviceUIView?.UpdateStateInfo(isActive);
+        _deviceView?.SetVisualState(isActive, hasCurrent);
+        _deviceUIView?.UpdateStateInfo(isActive, hasCurrent);
     }
 }

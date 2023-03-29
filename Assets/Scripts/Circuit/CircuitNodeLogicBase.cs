@@ -5,7 +5,7 @@ namespace Circuit
 {
     public class CircuitNodeLogicBase : ICircuitNodeLogic
     {
-        public event Action<bool> OnActiveStateChanged;
+        public event Action<bool, bool> OnStateChanged;
 
         public bool IsActive
         {
@@ -15,7 +15,8 @@ namespace Circuit
                 if (_isActive == value) return;
 
                 _isActive = value;
-                OnActiveStateChanged.Invoke(value);
+
+                OnStateChanged.Invoke(value, _hasCurrent);
                 RefreshOutputNodesCurrentState();
             }
         }
@@ -25,9 +26,9 @@ namespace Circuit
             get => _hasCurrent;
             protected set
             {
-                if (_hasCurrent == value) return;
-
                 _hasCurrent = value;
+
+                OnStateChanged.Invoke(_isActive, value);
                 RefreshOutputNodesCurrentState();
             }
         }

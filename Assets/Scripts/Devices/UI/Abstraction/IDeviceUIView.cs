@@ -7,6 +7,6 @@ namespace Devices.UI
         public event Action<bool> OnSetState;
 
         public void Initialize(string deviceName, bool isActive);
-        public void UpdateStateInfo(bool isActive);
+        public void UpdateStateInfo(bool isActive, bool hasCurrent);
     }
 }

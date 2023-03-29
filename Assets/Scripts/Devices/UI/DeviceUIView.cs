@@ -22,14 +22,14 @@ namespace Devices.UI
         {
             _deviceNameLabel.text = deviceName;
 
-            UpdateStateInfo(isActive);
+            UpdateStateInfo(isActive, false);
         }
 
-        public virtual void UpdateStateInfo(bool isActive)
+        public virtual void UpdateStateInfo(bool isActive, bool hasCurrent)
         {
             IsActive = isActive;
 
-            _stateLabel.text = isActive ? _activeStateStatusLabel : _inactiveStateStatusLabel;
+            _stateLabel.text = isActive && hasCurrent ? _activeStateStatusLabel : _inactiveStateStatusLabel;
         }
 
         protected void InvokeOnSetState(bool isActive)

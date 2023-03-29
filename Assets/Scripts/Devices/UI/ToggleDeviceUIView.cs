@@ -16,15 +16,14 @@ namespace Devices.UI
         {
             base.Initialize(deviceName, isActive);
 
-            _toggle.isOn = isActive;
+            _toggle.SetIsOnWithoutNotify(isActive);
             _toggle.onValueChanged.AddListener(OnSetToggleState);
         }
 
-        public override void UpdateStateInfo(bool isActive)
+        public override void UpdateStateInfo(bool isActive, bool hasCurrent)
         {
-            base.UpdateStateInfo(isActive);
+            base.UpdateStateInfo(isActive, hasCurrent);
 
-            _toggle.isOn = isActive;
             _toggleLabel.text = isActive ? _activeStateToggleLabel : _inactiveStateToggleLabel;
         }
 

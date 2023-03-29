@@ -3,7 +3,7 @@ using Data;
 
 public interface ICircuitNodeLogic
 {
-    public event Action<bool> OnActiveStateChanged;
+    public event Action<bool, bool> OnStateChanged;
 
     public bool IsActive { get; }
     public bool HasCurrent { get; }

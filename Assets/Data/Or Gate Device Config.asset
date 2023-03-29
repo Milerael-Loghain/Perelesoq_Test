@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f4bca00bea9400aa2129d5e238629ac, type: 3}
   m_Name: Or Gate Device Config
   m_EditorClassIdentifier: 
-  _deviceUIView: {fileID: 8167079366682642706, guid: 080b6417aedfa4969b0bb343a2ffcc2c, type: 3}
+  _deviceUIView: {fileID: 5009165850642696832, guid: 77581754d3dbcf049bbbb9cb14afe641, type: 3}

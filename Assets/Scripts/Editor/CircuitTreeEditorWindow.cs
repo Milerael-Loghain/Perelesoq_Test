@@ -38,9 +38,18 @@ namespace Editor
                 Dictionary<int, CircuitNode> nodeByIndex = new();
                 SetIndexesAndParentsRecursive(null, circuitManager.CircuitTree.RootNode, ref index, ref indexByGameObject, ref nodeByIndex);
 
-                circuitManager.Nodes = nodeByIndex.OrderBy(kp => kp.Key)
-                    .Select(kp => kp.Value)
-                    .ToList();
+                List<CircuitNode> list = new List<CircuitNode>();
+                // foreach (var kp1 in nodeByIndex.OrderBy(kp => kp.Key))
+                // {
+                //     list.Add(nodeByIndex[kp1.Key]);
+                // }
+
+                for (var i = 0; i < nodeByIndex.Count; i++)
+                {
+                    list.Add(nodeByIndex[i]);
+                }
+
+                circuitManager.Nodes = list;
 
                 EditorUtility.SetDirty(circuitManager);
             }
@@ -58,6 +67,7 @@ namespace Editor
             EditorGUILayout.LabelField(circuitNode.Index.ToString(), GUILayout.MaxWidth(15f));
             circuitNode.DefaultActiveState = EditorGUILayout.Toggle(circuitNode.DefaultActiveState, GUILayout.MaxWidth(15f));
             circuitNode.NodeGameObject = (GameObject) EditorGUILayout.ObjectField(circuitNode.NodeGameObject, typeof(GameObject));
+            EditorGUILayout.LabelField(circuitNode.GeneratedGuid);
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(25f);
 

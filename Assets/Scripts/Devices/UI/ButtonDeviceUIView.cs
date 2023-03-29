@@ -19,11 +19,11 @@ namespace Devices.UI
             _button.onClick.AddListener(OnButtonClick);
         }
 
-        public override void UpdateStateInfo(bool isActive)
+        public override void UpdateStateInfo(bool isActive, bool hasCurrent)
         {
-            base.UpdateStateInfo(isActive);
+            base.UpdateStateInfo(isActive, hasCurrent);
 
-            _buttonLabel.text = isActive ? _activeStateButtonLabel : _inactiveStateButtonLabel;
+            _buttonLabel.text = isActive && hasCurrent ? _activeStateButtonLabel : _inactiveStateButtonLabel;
         }
 
         private void OnButtonClick()
