@@ -33,14 +33,21 @@ public class CircuitNode : IDisposable
         set => _nodeGameObject = value;
     }
 
+    public bool DefaultActiveState
+    {
+        get => _defaultActiveState;
+        set => _defaultActiveState = value;
+    }
+
     public List<CircuitNode> OutputNodes => _outputNodes;
     public ICircuitNodeLogic CircuitNodeLogic => _circuitNodeLogic;
 
     [SerializeField] private int _index;
     [SerializeField] private CircuitDeviceType _deviceType;
-    [SerializeReference] private List<CircuitNode> _inputNodes = new();
+    [SerializeField] private bool _defaultActiveState;
+    [SerializeField] private List<CircuitNode> _inputNodes = new();
     [SerializeField] private GameObject _nodeGameObject;
-    [SerializeReference] private List<CircuitNode> _outputNodes = new();
+    [SerializeField] private List<CircuitNode> _outputNodes = new();
 
     private ICircuitNodeLogic _circuitNodeLogic;
     private IDeviceView _deviceView;
@@ -48,7 +55,7 @@ public class CircuitNode : IDisposable
 
     public void Initialize(DeviceConfigBase deviceConfigBase)
     {
-        if (deviceConfigBase.DeviceLogicType is not ICircuitNodeLogic) return;
+        if (!typeof(ICircuitNodeLogic).IsAssignableFrom(deviceConfigBase.DeviceLogicType)) return;
 
         _deviceView = _nodeGameObject.GetComponent<IDeviceView>();
 
@@ -77,7 +84,7 @@ public class CircuitNode : IDisposable
 
     private void OnSetStateFromLogic(bool isActive)
     {
-        _deviceView.SetVisualState(isActive);
-        _deviceUIView.UpdateStateInfo(isActive);
+        _deviceView?.SetVisualState(isActive);
+        _deviceUIView?.UpdateStateInfo(isActive);
     }
 }

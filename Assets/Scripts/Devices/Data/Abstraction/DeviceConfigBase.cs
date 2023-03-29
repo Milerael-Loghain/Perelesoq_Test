@@ -5,10 +5,9 @@ namespace Data
 {
     public class DeviceConfigBase : ScriptableObject
     {
-        public Type DeviceLogicType { get; }
-        public float ActiveEnergyConsumedByHour { get; }
-        public float EnergyConsumedByActivation { get; }
-        public bool InitialActiveState { get; }
-        public GameObject DeviceUiView { get; }
+        public virtual Type DeviceLogicType { get; }
+        public virtual float ActiveEnergyConsumedByHour { get; }
+        public virtual float EnergyConsumedByActivation { get; }
+        public virtual GameObject DeviceUiView { get; }
     }
 }

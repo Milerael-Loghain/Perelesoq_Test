@@ -18,7 +18,7 @@ public class CircuitManager : MonoBehaviour
 #endif
     }
 
-    [SerializeField] private CircuitTree _circuitTree;
+    [SerializeField] [HideInInspector] private CircuitTree _circuitTree;
     [SerializeField] private List<CircuitNode> _nodes;
 
     private void Awake()

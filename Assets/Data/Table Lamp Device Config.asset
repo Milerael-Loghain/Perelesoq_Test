@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b648c3ea3d9e4412b548654fcd8a217d, type: 3}
   m_Name: Table Lamp Device Config
   m_EditorClassIdentifier: 
-  _activeEnergyConsumedBySecond: 30
+  _activeEnergyConsumedByHour: 30
+  _deviceUIView: {fileID: 3555906959402618990, guid: ccf58d821c65c3e4bad7f4e6d087504b, type: 3}

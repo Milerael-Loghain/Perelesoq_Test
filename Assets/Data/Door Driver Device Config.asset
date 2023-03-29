@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Door Driver Device Config
   m_EditorClassIdentifier: 
   _energyConsumedByActivation: 50
+  _deviceUIView: {fileID: 4939499765225260732, guid: f391bf2cd9b2b5a4b87539c73db9f849, type: 3}

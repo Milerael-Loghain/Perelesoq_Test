@@ -24,6 +24,7 @@ namespace Startup
 
                 var deviceUiViewGO = Instantiate(deviceConfig.DeviceUiView, _devicesUIViewContainer);
                 var deviceUiView = deviceUiViewGO.GetComponent<IDeviceUIView>();
+                deviceUiView.Initialize(node.NodeGameObject.name, node.DefaultActiveState);
 
                 node.BindUIView(deviceUiView);
             }

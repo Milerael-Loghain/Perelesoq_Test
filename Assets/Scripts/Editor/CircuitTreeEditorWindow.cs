@@ -8,6 +8,8 @@ namespace Editor
 {
     public class CircuitTreeEditorWindow: EditorWindow
     {
+        private Vector2 _scrollPos;
+
         [MenuItem("Tools/CircuitTreeEditor")]
         public static void ShowWindow()
         {
@@ -19,36 +21,42 @@ namespace Editor
 
         public void OnGUI()
         {
-            var powerSource = FindObjectOfType<CircuitManager>();
+            var circuitManager = FindObjectOfType<CircuitManager>();
 
-            if (powerSource == null)
+            if (circuitManager == null)
             {
-                EditorGUILayout.LabelField("Power Source Doesn't Exits");
+                EditorGUILayout.LabelField("Circuit Manager Doesn't Exits");
                 return;
             }
 
+            _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
             if (GUILayout.Button("Refresh Nodes List"))
             {
                 int index = 0;
                 Dictionary<GameObject, int> indexByGameObject = new();
                 Dictionary<int, CircuitNode> nodeByIndex = new();
-                SetIndexesAndParentsRecursive(null, powerSource.CircuitTree.RootNode, ref index, ref indexByGameObject, ref nodeByIndex);
+                SetIndexesAndParentsRecursive(null, circuitManager.CircuitTree.RootNode, ref index, ref indexByGameObject, ref nodeByIndex);
 
-                powerSource.Nodes = nodeByIndex.OrderBy(kp => kp.Key)
+                circuitManager.Nodes = nodeByIndex.OrderBy(kp => kp.Key)
                     .Select(kp => kp.Value)
                     .ToList();
+
+                EditorUtility.SetDirty(circuitManager);
             }
 
-            DrawNode(powerSource.CircuitTree.RootNode);
+            DrawNode(circuitManager.CircuitTree.RootNode);
+
+            EditorGUILayout.EndScrollView();
         }
 
         private void DrawNode(CircuitNode circuitNode)
         {
-            EditorGUILayout.BeginVertical(GUILayout.MaxWidth(300f));
+            EditorGUILayout.BeginVertical();
             circuitNode.DeviceType = (CircuitDeviceType) EditorGUILayout.EnumPopup(circuitNode.DeviceType);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(circuitNode.Index.ToString(), GUILayout.MaxWidth(15f));
+            circuitNode.DefaultActiveState = EditorGUILayout.Toggle(circuitNode.DefaultActiveState, GUILayout.MaxWidth(15f));
             circuitNode.NodeGameObject = (GameObject) EditorGUILayout.ObjectField(circuitNode.NodeGameObject, typeof(GameObject));
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(25f);

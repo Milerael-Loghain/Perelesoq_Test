@@ -45,7 +45,7 @@ namespace Circuit
             CircuitNode = circuitNode;
             ActiveEnergyConsumedBySecond = deviceConfigBase.ActiveEnergyConsumedByHour;
             _energyConsumedByActivation = deviceConfigBase.EnergyConsumedByActivation;
-            IsActive = deviceConfigBase.InitialActiveState;
+            IsActive = circuitNode.DefaultActiveState;
         }
 
         public virtual float SetActiveState(bool isActive)
@@ -74,7 +74,7 @@ namespace Circuit
         {
             foreach (var outputNode in CircuitNode.OutputNodes)
             {
-                outputNode.CircuitNodeLogic.RefreshCurrentState();
+                outputNode.CircuitNodeLogic?.RefreshCurrentState();
             }
         }
     }

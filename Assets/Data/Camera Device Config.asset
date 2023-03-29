@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84259f93dd141eeaf073a4f11359210, type: 3}
   m_Name: Camera Device Config
   m_EditorClassIdentifier: 
+  _deviceUIView: {fileID: 2806585787481988981, guid: a008335cf31c7ed42af6cd66b54f9a9d, type: 3}

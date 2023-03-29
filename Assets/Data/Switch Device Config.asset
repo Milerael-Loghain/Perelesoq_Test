@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4c94be47eb64dcf86df350e75fd4b89, type: 3}
   m_Name: Switch Device Config
   m_EditorClassIdentifier: 
+  _deviceUIView: {fileID: 5949553356351571754, guid: 2bd7cbc29f1abfa499f4b61e26b4b0b2, type: 3}
