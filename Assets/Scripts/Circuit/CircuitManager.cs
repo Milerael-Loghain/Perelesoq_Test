@@ -36,7 +36,7 @@ public class CircuitManager : MonoBehaviour
         int index = 0;
         Dictionary<GameObject, int> indexByGameObject = new();
         Dictionary<int, CircuitNode> nodeByIndex = new();
-        SetIndexesAndParentsRecursive(null, CircuitTree.RootNode, ref index, ref indexByGameObject, ref nodeByIndex);
+        SetIndexesAndParentsRecursive(null, _circuitTree.RootNode, ref index, ref indexByGameObject, ref nodeByIndex);
 
         _nodes = new List<CircuitNode>();
 

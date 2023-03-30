@@ -38,6 +38,11 @@ namespace Startup
         private void Update()
         {
             _circuitConsumptionTracker?.Update();
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(0);
+            }
         }
 
         private void OnDestroy()
