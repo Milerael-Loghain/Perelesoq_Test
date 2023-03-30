@@ -5,7 +5,7 @@ namespace Circuit
 {
     public class CircuitNodeLogicBase : ICircuitNodeLogic
     {
-        public event Action<bool, bool> OnStateChanged;
+        public event Action<bool, bool, float> OnStateChanged;
 
         public bool IsActive
         {
@@ -16,7 +16,7 @@ namespace Circuit
 
                 _isActive = value;
 
-                OnStateChanged.Invoke(value, _hasCurrent);
+                OnStateChanged.Invoke(value, _hasCurrent, _energyConsumedByActivation);
                 RefreshOutputNodesCurrentState();
             }
         }
@@ -28,12 +28,20 @@ namespace Circuit
             {
                 _hasCurrent = value;
 
-                OnStateChanged.Invoke(_isActive, value);
+                OnStateChanged.Invoke(_isActive, value, _energyConsumedByActivation);
                 RefreshOutputNodesCurrentState();
             }
         }
 
-        public float ActiveEnergyConsumedBySecond { get; private set; }
+        public float ActiveEnergyConsumedByHour
+        {
+            get
+            {
+                if (!_isActive || !_hasCurrent) return 0;
+                return _activeEnergyConsumedBySecond;
+            }
+            private set => _activeEnergyConsumedBySecond = value;
+        }
 
         protected CircuitNode CircuitNode;
 
@@ -41,24 +49,23 @@ namespace Circuit
         private bool _hasCurrent;
         private float _energyConsumedByActivation;
         private bool _canBeActivatedWithoutCurrent;
+        private float _activeEnergyConsumedBySecond;
 
         public virtual void Initialize(CircuitNode circuitNode, DeviceConfigBase deviceConfigBase)
         {
             CircuitNode = circuitNode;
             IsActive = circuitNode.DefaultActiveState;
 
-            ActiveEnergyConsumedBySecond = deviceConfigBase.ActiveEnergyConsumedByHour;
+            ActiveEnergyConsumedByHour = deviceConfigBase.ActiveEnergyConsumedByHour;
             _energyConsumedByActivation = deviceConfigBase.EnergyConsumedByActivation;
             _canBeActivatedWithoutCurrent = deviceConfigBase.CanBeActivatedWithoutCurrent;
         }
 
-        public virtual float SetActiveState(bool isActive)
+        public virtual void SetActiveState(bool isActive)
         {
-            if (!_canBeActivatedWithoutCurrent && !_hasCurrent) return 0;
+            if (!_canBeActivatedWithoutCurrent && !_hasCurrent) return;
 
             IsActive = isActive;
-
-            return _energyConsumedByActivation;
         }
 
         public virtual void RefreshCurrentState()

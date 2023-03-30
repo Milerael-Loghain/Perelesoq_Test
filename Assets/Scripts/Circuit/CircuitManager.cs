@@ -105,7 +105,7 @@ public class CircuitManager : MonoBehaviour
             {
                 var circuitNodeLogic = circuitNode.CircuitNodeLogic;
                 _cameraLogicNodes.Add(circuitNodeLogic);
-                circuitNodeLogic.OnStateChanged += (b, b1) => OnCameraNodeActivated(_cameraLogicNodes.IndexOf(circuitNodeLogic));
+                circuitNodeLogic.OnStateChanged += (b, b1, f) => OnCameraNodeActivated(_cameraLogicNodes.IndexOf(circuitNodeLogic));
             }
         }
     }

@@ -11,9 +11,9 @@ namespace Circuit
             IsActive = true;
         }
 
-        public override float SetActiveState(bool isActive)
+        public override void SetActiveState(bool isActive)
         {
-            return base.SetActiveState(true);
+            base.SetActiveState(true);
         }
     }
 }

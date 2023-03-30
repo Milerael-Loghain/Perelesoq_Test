@@ -87,7 +87,7 @@ public class CircuitNode : IDisposable
         _circuitNodeLogic.SetActiveState(isActive);
     }
 
-    private void OnSetStateFromLogic(bool isActive, bool hasCurrent)
+    private void OnSetStateFromLogic(bool isActive, bool hasCurrent, float consumption)
     {
         _deviceView?.SetVisualState(isActive, hasCurrent);
         _deviceUIView?.UpdateStateInfo(isActive, hasCurrent);

@@ -3,13 +3,13 @@ using Data;
 
 public interface ICircuitNodeLogic
 {
-    public event Action<bool, bool> OnStateChanged;
+    public event Action<bool, bool, float> OnStateChanged;
 
     public bool IsActive { get; }
     public bool HasCurrent { get; }
-    public float ActiveEnergyConsumedBySecond { get; }
+    public float ActiveEnergyConsumedByHour { get; }
 
     public void Initialize(CircuitNode circuitNode, DeviceConfigBase deviceConfigBase);
-    public float SetActiveState(bool isActive);
+    public void SetActiveState(bool isActive);
     public void RefreshCurrentState();
 }

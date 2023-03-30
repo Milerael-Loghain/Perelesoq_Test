@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using Devices.Data;
+using Devices.UI;
 using Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,8 +14,13 @@ namespace Startup
 
         [SerializeField] private DevicesConfig _devicesConfig;
 
+        private CircuitConsumptionTracker _circuitConsumptionTracker;
+
         private IEnumerator Start()
         {
+            _circuitConsumptionTracker = new CircuitConsumptionTracker();
+            ServiceLocator.Instance.Register(_circuitConsumptionTracker);
+
             foreach (var gameScene in _gameScenes)
             {
                 yield return SceneManager.LoadSceneAsync(gameScene, LoadSceneMode.Additive);
@@ -24,6 +31,18 @@ namespace Startup
 
             circuitUIManager.Initialize(circuitManager.Nodes, _devicesConfig);
             circuitManager.Initialize(_devicesConfig);
+
+            _circuitConsumptionTracker.Initialize(circuitManager);
+        }
+
+        private void Update()
+        {
+            _circuitConsumptionTracker?.Update();
+        }
+
+        private void OnDestroy()
+        {
+            ServiceLocator.Instance.Unregister(_circuitConsumptionTracker);
         }
     }
 }
