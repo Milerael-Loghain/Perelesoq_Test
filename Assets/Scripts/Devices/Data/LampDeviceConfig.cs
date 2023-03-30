@@ -12,6 +12,7 @@ namespace Devices.Data
         public override float ActiveEnergyConsumedByHour => _activeEnergyConsumedByHour;
         public override float EnergyConsumedByActivation => 0;
         public override GameObject DeviceUiView => _deviceUIView;
+        public override bool CanBeActivatedWithoutCurrent => false;
 
         [SerializeField] private float _activeEnergyConsumedByHour;
         [SerializeField] private GameObject _deviceUIView;

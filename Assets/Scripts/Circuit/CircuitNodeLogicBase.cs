@@ -40,17 +40,22 @@ namespace Circuit
         private bool _isActive;
         private bool _hasCurrent;
         private float _energyConsumedByActivation;
+        private bool _canBeActivatedWithoutCurrent;
 
         public virtual void Initialize(CircuitNode circuitNode, DeviceConfigBase deviceConfigBase)
         {
             CircuitNode = circuitNode;
+            IsActive = circuitNode.DefaultActiveState;
+
             ActiveEnergyConsumedBySecond = deviceConfigBase.ActiveEnergyConsumedByHour;
             _energyConsumedByActivation = deviceConfigBase.EnergyConsumedByActivation;
-            IsActive = circuitNode.DefaultActiveState;
+            _canBeActivatedWithoutCurrent = deviceConfigBase.CanBeActivatedWithoutCurrent;
         }
 
         public virtual float SetActiveState(bool isActive)
         {
+            if (!_canBeActivatedWithoutCurrent && !_hasCurrent) return 0;
+
             IsActive = isActive;
 
             return _energyConsumedByActivation;

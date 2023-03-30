@@ -111,7 +111,9 @@ namespace Editor
 
             if (nodeByIndex.ContainsKey(node.Index))
             {
+                var nodeIndex = parentNode.OutputNodes.IndexOf(node);
                 node = nodeByIndex[node.Index];
+                parentNode.OutputNodes[nodeIndex] = node;
             }
             else
             {
@@ -127,8 +129,9 @@ namespace Editor
                 }
             }
 
-            foreach (var childNode in node.OutputNodes)
+            for (var i = node.OutputNodes.Count - 1; i >= 0; i--)
             {
+                var childNode = node.OutputNodes[i];
                 SetIndexesAndParentsRecursive(node, childNode, ref index, ref indexByGameObject, ref nodeByIndex);
             }
         }

@@ -12,7 +12,7 @@ namespace Circuit
                 if (node.CircuitNodeLogic.HasCurrent && node.CircuitNodeLogic.IsActive)
                 {
                     HasCurrent = true;
-                    break;
+                    return;
                 }
             }
 

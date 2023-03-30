@@ -8,6 +8,7 @@ namespace Data
         public virtual Type DeviceLogicType { get; }
         public virtual float ActiveEnergyConsumedByHour { get; }
         public virtual float EnergyConsumedByActivation { get; }
+        public virtual bool CanBeActivatedWithoutCurrent { get; }
         public virtual GameObject DeviceUiView { get; }
     }
 }

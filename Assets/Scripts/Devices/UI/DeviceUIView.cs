@@ -17,6 +17,7 @@ namespace Devices.UI
         public event Action<bool> OnSetState;
 
         protected bool IsActive;
+        protected bool HasCurrent;
 
         public virtual void Initialize(string deviceName, bool isActive)
         {
@@ -28,6 +29,7 @@ namespace Devices.UI
         public virtual void UpdateStateInfo(bool isActive, bool hasCurrent)
         {
             IsActive = isActive;
+            HasCurrent = hasCurrent;
 
             _stateLabel.text = isActive && hasCurrent ? _activeStateStatusLabel : _inactiveStateStatusLabel;
         }

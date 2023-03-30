@@ -16,7 +16,8 @@ namespace Devices.UI
         {
             base.Initialize(deviceName, isActive);
 
-            _toggle.SetIsOnWithoutNotify(isActive);
+            _toggle.isOn = isActive;
+
             _toggle.onValueChanged.AddListener(OnSetToggleState);
         }
 
@@ -29,7 +30,7 @@ namespace Devices.UI
 
         private void OnSetToggleState(bool state)
         {
-            InvokeOnSetState(!state);
+            InvokeOnSetState(state);
         }
 
         private void OnDestroy()

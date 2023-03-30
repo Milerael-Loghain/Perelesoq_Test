@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Devices;
 using Devices.Data;
 using Framework;
 using UnityEngine;
@@ -20,7 +21,9 @@ public class CircuitManager : MonoBehaviour
     }
 
     [SerializeField] [HideInInspector] private CircuitTree _circuitTree;
+
     private List<CircuitNode> _nodes;
+    private List<ICircuitNodeLogic> _cameraLogicNodes;
 
     private void Awake()
     {
@@ -59,7 +62,9 @@ public class CircuitManager : MonoBehaviour
 
         if (nodeByIndex.ContainsKey(node.Index))
         {
+            var nodeIndex = parentNode.OutputNodes.IndexOf(node);
             node = nodeByIndex[node.Index];
+            parentNode.OutputNodes[nodeIndex] = node;
         }
         else
         {
@@ -75,8 +80,9 @@ public class CircuitManager : MonoBehaviour
             }
         }
 
-        foreach (var childNode in node.OutputNodes)
+        for (var i = node.OutputNodes.Count - 1; i >= 0; i--)
         {
+            var childNode = node.OutputNodes[i];
             SetIndexesAndParentsRecursive(node, childNode, ref index, ref indexByGameObject, ref nodeByIndex);
         }
     }
@@ -91,6 +97,17 @@ public class CircuitManager : MonoBehaviour
         }
 
         _nodes.FirstOrDefault()?.CircuitNodeLogic.RefreshCurrentState();
+
+        _cameraLogicNodes = new();
+        foreach (var circuitNode in _nodes)
+        {
+            if (circuitNode.DeviceType == CircuitDeviceType.Camera)
+            {
+                var circuitNodeLogic = circuitNode.CircuitNodeLogic;
+                _cameraLogicNodes.Add(circuitNodeLogic);
+                circuitNodeLogic.OnStateChanged += (b, b1) => OnCameraNodeActivated(_cameraLogicNodes.IndexOf(circuitNodeLogic));
+            }
+        }
     }
 
     private void OnDestroy()
@@ -100,6 +117,17 @@ public class CircuitManager : MonoBehaviour
         foreach (var node in _nodes)
         {
             node.Dispose();
+        }
+    }
+
+    private void OnCameraNodeActivated(int cameraIndex)
+    {
+        for (int i = 0; i < _cameraLogicNodes.Count; i++)
+        {
+            if (i == cameraIndex) continue;
+            var cameraLogic = _cameraLogicNodes[i];
+
+            cameraLogic.SetActiveState(false);
         }
     }
 }
